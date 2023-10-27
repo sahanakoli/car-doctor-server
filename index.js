@@ -28,7 +28,8 @@ async function run() {
 
     const serviceCollection = client.db('carDoctor').collection('services');
     const bookingCollection = client.db('carDoctor').collection('bookings');
-
+    
+    // service
     app.get('/service', async(req,res) =>{
         const cursor = serviceCollection.find();
         const result = await cursor.toArray();
@@ -60,7 +61,6 @@ async function run() {
       const result = await bookingCollection.find(query).toArray();
       res.send(result);
     })
-
 
     app.post('/bookings', async(req,res) =>{
       const booking = req.body;
