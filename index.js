@@ -47,7 +47,7 @@ const verifyToken = async(req, res, next) =>{
     }
     // if token is valid then it would be decoded
     console.log('valid in the token', decoded)
-    
+    req.user = decoded;
     next();
   })
   
@@ -102,6 +102,10 @@ async function run() {
     app.get('/bookings', logger, verifyToken, async(req,res) =>{
       console.log(req.query)
       // console.log('ttt token', req.cookies.token)
+      console.log('user in the valid token', req.user)
+      if(req.query.email !== req.user.email){
+        return res.status(403).send({message: 'forbidden access'})
+      }
       let query = {};
       if(req.query?.email){
         query = {email: req.query.email}
