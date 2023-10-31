@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 
 // middleware
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  origin: ['http://localhost:5173', "https://65408c7ff6ee3d58cc308336--lambent-pika-de8dad.netlify.app/"],
   credentials: true
 }));
 
@@ -56,7 +56,7 @@ const verifyToken = async(req, res, next) =>{
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const serviceCollection = client.db('carDoctor').collection('services');
     const bookingCollection = client.db('carDoctor').collection('bookings');
@@ -70,9 +70,16 @@ async function run() {
       .cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production'? 'none' : 'strict'        
+        sameSite: process.env.NODE_ENV === 'production'? 'none' : 'strict'
+               
       })
       .send({success: true});
+    })
+
+    app.post('/logout', async(req, res) =>{
+      const user = req.body;
+      console.log('logging out', user);
+      res.clearCookie('token', {maxAge: 0}).send({success: true})
     })
 
 
